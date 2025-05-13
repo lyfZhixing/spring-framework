@@ -250,18 +250,18 @@ public class AnnotatedBeanDefinitionReader {
 			@Nullable Class<? extends Annotation>[] qualifiers, @Nullable Supplier<T> supplier,
 			@Nullable BeanDefinitionCustomizer[] customizers) {
 
-		AnnotatedGenericBeanDefinition abd = new AnnotatedGenericBeanDefinition(beanClass);
+		AnnotatedGenericBeanDefinition abd = new AnnotatedGenericBeanDefinition(beanClass); // 创建一个基于注解的Bean定义对象AnnotatedGenericBeanDefinition，用于描述给定beanClass的配置元数据。
 		if (this.conditionEvaluator.shouldSkip(abd.getMetadata())) {
 			return;
 		}
 
-		abd.setInstanceSupplier(supplier);
-		ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(abd);
-		abd.setScope(scopeMetadata.getScopeName());
+		abd.setInstanceSupplier(supplier);  // 置该Bean定义的实例提供者函数，用于延迟创建Bean实例。
+		ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(abd); // 解析Bean定义的Scope元数据，并返回ScopeMetadata对象。
+		abd.setScope(scopeMetadata.getScopeName()); // 设置scope
 		String beanName = (name != null ? name : this.beanNameGenerator.generateBeanName(abd, this.registry));
 
-		AnnotationConfigUtils.processCommonDefinitionAnnotations(abd);
-		if (qualifiers != null) {
+		AnnotationConfigUtils.processCommonDefinitionAnnotations(abd); // 处理Bean定义的通用注解，如@Primary、@Lazy、@Qualifier等。
+		if (qualifiers != null) { // 外部配置优先
 			for (Class<? extends Annotation> qualifier : qualifiers) {
 				if (Primary.class == qualifier) {
 					abd.setPrimary(true);
@@ -280,9 +280,9 @@ public class AnnotatedBeanDefinitionReader {
 			}
 		}
 
-		BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(abd, beanName);
-		definitionHolder = AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
-		BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, this.registry);
+		BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(abd, beanName); // 创建一个BeanDefinition占位符，用于封装Bean定义和Bean名称。
+		definitionHolder = AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry); // 处理Bean定义的Scope代理模式，并返回处理后的BeanDefinitionHolder对象。
+		BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, this.registry); // 注册Bean
 	}
 
 

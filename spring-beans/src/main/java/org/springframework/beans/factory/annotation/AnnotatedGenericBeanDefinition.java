@@ -55,7 +55,7 @@ public class AnnotatedGenericBeanDefinition extends GenericBeanDefinition implem
 	 */
 	public AnnotatedGenericBeanDefinition(Class<?> beanClass) {
 		setBeanClass(beanClass);
-		this.metadata = AnnotationMetadata.introspect(beanClass);
+		this.metadata = AnnotationMetadata.introspect(beanClass); // 使用反射获取类的元数据
 	}
 
 	/**
